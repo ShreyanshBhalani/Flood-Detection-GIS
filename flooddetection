@@ -28,3 +28,6 @@ var filtered=s1
   .select(['VV','VH'])
 print(filtered.first())
 
+var before = filtered.filterDate(beforeStart, beforeEnd).mosaic();
+var after = filtered.filterDate(afterStart,afterEnd).mosaic();
+
