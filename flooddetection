@@ -26,3 +26,4 @@ var filtered=s1
   .filterBounds(geometry)
   .select(['VV','VH'])
 print(filtered.first())
+
