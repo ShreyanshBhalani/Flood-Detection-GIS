@@ -13,7 +13,7 @@ var afterStart = '2018-08-10'
 var afterEnd = '2018-08-23'
 
 var admin2 = ee.FeatureCollection("FAO/GAUL_SIMPLIFIED_500m/2015/level2");
-var ernakulam = admin2.filter(ee.Filter.eq('ADM2_NAME', 'Kerala'))
+var ernakulam = admin2.filter(ee.Filter.eq('ADM1_NAME', 'Kerala'))
 var geometry = ernakulam.geometry()
 Map.addLayer(geometry, {color: 'grey'}, 'Ernakulam District')
 
