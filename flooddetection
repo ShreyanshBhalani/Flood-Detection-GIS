@@ -8,10 +8,10 @@ var s1 = ee.ImageCollection("COPERNICUS/S1_GRD");
 // https://en.wikipedia.org/wiki/2018_Kerala_floods
 
 // Select images by predefined dates
-var beforeStart = '2005-07-15'
-var beforeEnd = '2005-08-10'
-var afterStart = '2005-08-10'
-var afterEnd = '2005-08-23'
+var beforeStart = '2018-07-15'
+var beforeEnd = '2018-08-10'
+var afterStart = '2018-08-10'
+var afterEnd = '2018-08-23'
 
 var admin2 = ee.FeatureCollection("FAO/GAUL_SIMPLIFIED_500m/2015/level2");
 var ernakulam = admin2.filter(ee.Filter.inList('ADM2_NAME', ['Mumbai city','Mumbai Suburban']))
@@ -31,3 +31,39 @@ print(filtered.first())
 var before = filtered.filterDate(beforeStart, beforeEnd).mosaic();
 var after = filtered.filterDate(afterStart,afterEnd).mosaic();
 
+Map.centerObject(geometry, 7)
+Map.addLayer(before,{min:-15,max:0}, 'Before Flood',0);
+Map.addLayer(after,{min:-15,max:0}, 'After Flood',0); 
+
+//Aplly speckle
+var smoothing=50;
+var before_filtered=before.focal_mean(smoothing,'circle','meters');
+var after_filtered=after.focal_mean(smoothing,'circle','meters');
+
+Map.addLayer(before_filtered,{min:-15,max:0},'Before Flood Filtered',0);
+Map.addLayer(after_filtered,{min:-15,max:0},'After Flood Filtered',0);
+
+//var newfc=open_water_permanent.merge(open_water_flooded).merge(flooded_vegetation).merge(urban);
+
+//Create training data
+// var final=ee.Image.cat(before_filtered,after_filtered)
+// var bands=['VV','VH'];
+// var training=final.select(bands).sampleRegions({
+//   collection:newfc,
+//   properties:['landcover'],
+//   scale:30
+// })
+
+// var classifier=ee.Classifier.cart().train({
+//   features:training,
+//   classProperty:'landcover',
+//   inputProperties:bands
+// });
+
+// var classified=final.select(bands).classify(classifier);
+
+// Map.addLayer(classified,
+// {min:1,max:5,palette:['#244b99','#37b0ff','#ff15e8','#ffc82d']},'classification');
+
+// print('Error matrix:',classifier.confusionMatrix());
+// print('Accuracy matrix:',classifier.confusionMatrix().accuracy());
